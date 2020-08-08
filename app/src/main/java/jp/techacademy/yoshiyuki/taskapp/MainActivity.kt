@@ -10,6 +10,7 @@ import io.realm.RealmChangeListener
 import io.realm.Sort
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.widget.Button
 
 const val EXTRA_TASK = "jp.techacademy.yoshiyuki.taskapp.TASK"
 
@@ -88,8 +89,30 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        //カテゴリを入力しえボタンが押された時
+        editButton.setOnClickListener{
+           ReloadeditButton()
+        }
+
         reloadListView()
     }
+    private fun ReloadeditButton() {
+        // カテゴリがedittextと一致するものを取得する。
+        var edittxt: String = editText.text.toString()
+
+        val taskRealmResults = mRealm.where(Task::class.java)
+            .equalTo("category",edittxt).findAll().sort("date", Sort.DESCENDING)
+
+        // 上記の結果を、TaskList としてセットする
+        mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+
+        // TaskのListView用のアダプタに渡す
+        listView1.adapter = mTaskAdapter
+
+        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+        mTaskAdapter.notifyDataSetChanged()
+    }
+
     private fun reloadListView() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         val taskRealmResults = mRealm.where(Task::class.java).findAll().sort("date", Sort.DESCENDING)
