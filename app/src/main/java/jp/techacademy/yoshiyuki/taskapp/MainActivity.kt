@@ -89,9 +89,14 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        //カテゴリを入力しえボタンが押された時
+        //カテゴリを入力し検索ボタンが押された時
         editButton.setOnClickListener{
            ReloadeditButton()
+        }
+
+        //全表示ボタンが押された時
+        editButton2.setOnClickListener{
+            reloadListView()
         }
 
         reloadListView()
